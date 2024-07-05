@@ -1,47 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// Interface declaration for token operations
-interface IToken {
-    function totalSupply() external view returns (uint256);
-    function balanceOf(address account) external view returns (uint256);
-    function transfer(address recipient, uint256 amount) external returns (bool);
-    function allowance(address owner, address spender) external view returns (uint256);
-    function approve(address spender, uint256 amount) external returns (bool);
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+import "./erc20.sol";
 
-    event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed owner, address indexed spender, uint256 value);
-}
+contract Vault {
+    Token public immutable token;
+    mapping(address => uint256) public balances;
 
-// Smart contract for the treasure hunt game
-contract TreasureHuntGame {
-    IToken public immutable gameToken;
-
-    event PaymentMade(address indexed payer, address indexed payee, uint256 amount, string note);
-    event RemittanceSent(address indexed sender, address indexed receiver, uint256 amount, string note);
+    event Deposit(address indexed depositor, uint256 amount);
+    event Withdrawal(address indexed withdrawer, uint256 amount);
 
     constructor(address tokenAddress) {
-        gameToken = IToken(tokenAddress);
+        token = Token(tokenAddress);
     }
 
-    // Function to make a payment to another account
-    function makePayment(address recipient, uint256 amount, string memory note) external {
-        require(recipient != address(0), "Recipient address cannot be zero");
-        require(gameToken.balanceOf(msg.sender) >= amount, "Insufficient balance");
+    function deposit(uint256 amount) external {
+        require(amount > 0, "Deposit amount must be greater than zero");
+        require(token.transferFrom(msg.sender, address(this), amount), "Transfer failed");
 
-        require(gameToken.transferFrom(msg.sender, recipient, amount), "Payment transfer failed");
+        balances[msg.sender] += amount;
 
-        emit PaymentMade(msg.sender, recipient, amount, note);
+        emit Deposit(msg.sender, amount);
     }
 
-    // Function to send remittance to another account
-    function sendRemittance(address recipient, uint256 amount, string memory note) external {
-        require(recipient != address(0), "Recipient address cannot be zero");
-        require(gameToken.balanceOf(msg.sender) >= amount, "Insufficient balance");
+    function withdraw(uint256 amount) external {
+        require(amount > 0, "Withdrawal amount must be greater than zero");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
 
-        require(gameToken.transferFrom(msg.sender, recipient, amount), "Remittance transfer failed");
+        balances[msg.sender] -= amount;
+        require(token.transfer(msg.sender, amount), "Transfer failed");
 
-        emit RemittanceSent(msg.sender, recipient, amount, note);
+        emit Withdrawal(msg.sender, amount);
     }
 }
