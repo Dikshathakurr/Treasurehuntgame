@@ -1,44 +1,24 @@
-# Treasure Hunt Game
-This project has two smart contracts : TreasureHuntToken and TreasureHuntGame. TreasureHuntToken is a special cryptocurrency we  can send, create, or destroy. TreasureHuntGame uses these tokens for game transactions between players. The game is like a treasure hunt where you use the tokens to play. Everything runs on the blockchain for security and transparency.
+# overview
+The ERC20 token contract defines a standard token with functionalities for transferring tokens, approving allowances, and transferring tokens on behalf of others. The Vault contract allows users to deposit and withdraw these tokens.
 
-# Components
 
-TreasureHuntToken:
+# Key Features:
 
-The TreasureHuntToken contract implements the ERC-20 token standard, which is a widely used standard for creating custom tokens on the Ethereum blockchain. This token can be transferred between players, 
-used in transactions within the game, and managed by the game owner.
-It  defines a set of functions that all compliant tokens must implement. These include functions for transferring tokens, checking balances, and approving allowances.
-
-The TreasureHuntGame contract manages the treasure hunt game, using the TreasureHuntToken as the in-game currency. Players can make payments and send remittances to each other as part of the game.
-
-# Key Features
-
-1) Token Information:
-
- TokenName: The name of the token (e.g., "Treasure Hunt Token").
-
- TokenSymbol: The symbol of the token (e.g., "THT").
+1) ERC20 Token (ERC20.sol)
    
- TokenDecimals: The number of decimal places the token uses.
- 
- TokenTotalSupply: The total supply of tokens in circulation.
+    It  Provides standard functions for transferring tokens (transfer and transferFrom).
 
+    It Allows users to transfer tokens between addresses securely.
 
+2) Vault (Vault.sol)
 
-  2)  Ownership:
-
-  contractOwner: The address of the contract owner who has special privileges, such as minting new tokens.
-
-
-   3) Events:
-
-  Transfer: Emitted when tokens are transferred from one account to another.
- 
-  Approval: Emitted when an account approves another account to spend tokens on its behalf.
+     Users can deposit ERC20 tokens securely into the Vault contract.
   
-  Mint: Emitted when new tokens are created.
+     It  Provides controlled withdrawals of deposited tokens.
   
- Burn: Emitted when tokens are destroyed.
+     Tracks user balances within the Vault for accurate deposit and withdrawal operations.
+   
+     Emits events (Deposit and Withdrawal) to track deposit and withdrawal activities.
 
 
 # Deployment and Interaction
@@ -117,7 +97,7 @@ The TreasureHuntGame contract manages the treasure hunt game, using the Treasure
 
 ### Conclusion
 
-The basic infrastructure needed to create a payment platform with ERC20 tokens is provided by this project.This project creates a treasure hunt game on Avalanche using smart contracts. Players use a custom cryptocurrency called TreasureHuntToken for game transactions like payments and remittances. The TreasureHuntToken contract manages token creation, transfers, and ownership. With MetaMask integration, players can securely interact with the game on the Avalanche blockchain, ensuring transparency and fairness in gameplay.
+These contracts provide a straightforward way to manage ERC20 tokens securely on the blockchain. The ERC20.sol contract sets the standard for token interaction, while the Vault.sol contract enhances security by allowing controlled deposits and withdrawals. Whether you're building a decentralized application or managing digital assets, these contracts offer essential functionalities for interacting with ERC20 tokens.
 
 # License
 These contracts are licensed under the MIT License.
